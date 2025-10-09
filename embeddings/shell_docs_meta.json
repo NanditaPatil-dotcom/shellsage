@@ -1,0 +1,18 @@
+[
+  {
+    "path": "docs/commands.txt",
+    "text": "ls -la -> lists all files in long format, including hidden ones\ngrep -> searches for patterns in text files\nsudo apt update -> updates package lists\n"
+  },
+  {
+    "path": "docs/grep.txt",
+    "text": "grep — print lines that match patterns\n\nBrief:\n- grep searches for lines matching a given pattern in files or standard input.\n- Supports powerful regular expressions to filter text.\n\nSyntax:\n- grep \"pattern\" file.txt\n- grep -R \"main\" ./src          # recursive search\n- grep -n \"error\" app.log       # show line numbers\n- grep -i \"warning\" file.txt    # case-insensitive\n- grep -E \"foo|bar\" file.txt    # extended regex (egrep)\n\nExamples:\n- dmesg | grep -i usb\n- grep -R \"TODO\" .\n\nTips:\n- Use -R for recursive, -n for line numbers, -i for case-insensitive.\n- Pipe other commands into grep to filter output.\n- For large codebases, consider ripgrep (rg) for speed.\n"
+  },
+  {
+    "path": "docs/ls.txt",
+    "text": "ls — list directory contents\n\nBrief:\n- The ls command lists files and directories in the current or specified path.\n- Commonly used to quickly inspect what is inside a folder.\n\nSyntax:\n- ls\n- ls -l            # long listing with permissions, owner, size, and date\n- ls -a            # include hidden files (those starting with .)\n- ls -la           # long listing + hidden files\n- ls -lh           # long listing with human-readable sizes (KB, MB)\n\nExamples:\n- ls -la /var/log\n- ls -lh ~/Downloads\n\nTips:\n- Combine -l with -h for easier reading of file sizes.\n- Use --color=auto for colored output in many shells.\n- On macOS, consider -G for color if --color isn’t available.\n"
+  },
+  {
+    "path": "docs/ps.txt",
+    "text": "ps — report process status\n\nBrief:\n- ps shows information about running processes.\n- Often combined with options to display all processes and their details.\n\nSyntax:\n- ps\n- ps aux             # show all processes for all users with extended info (BSD style)\n- ps -ef             # show all processes in full-format listing (SysV style)\n- ps aux | grep ssh  # find processes related to 'ssh'\n\nExamples:\n- ps aux | grep python\n- ps -ef | grep nginx\n\nTips:\n- ps aux vs ps -ef are similar but from different conventions (BSD vs SysV).\n- Use top or htop for a dynamic, real-time view.\n- Combine with grep to quickly filter by command or user.\n"
+  }
+]

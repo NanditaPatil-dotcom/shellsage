@@ -1,0 +1,23 @@
+# Core CLI
+# Pin click to 8.1.x due to Typer compatibility
+click==8.1.7
+typer==0.12.3
+rich==13.7.1
+
+# RAG: embeddings + transformers + hub
+sentence-transformers==2.7.0
+# Bump transformers to a version that supports Python 3.13 and tokenizers>=0.20
+transformers==4.46.3
+huggingface_hub==0.24.6
+
+# Vector retrieval
+faiss-cpu==1.12.0
+
+# Deep learning runtime (CPU)
+torch>=2.1.0
+numpy>=1.26.0
+
+# Optional utilities
+tqdm==4.66.4
+PyPDF2==3.0.1
+pdfminer.six==20231228

@@ -1,0 +1,20 @@
+ps — report process status
+
+Brief:
+- ps shows information about running processes.
+- Often combined with options to display all processes and their details.
+
+Syntax:
+- ps
+- ps aux             # show all processes for all users with extended info (BSD style)
+- ps -ef             # show all processes in full-format listing (SysV style)
+- ps aux | grep ssh  # find processes related to 'ssh'
+
+Examples:
+- ps aux | grep python
+- ps -ef | grep nginx
+
+Tips:
+- ps aux vs ps -ef are similar but from different conventions (BSD vs SysV).
+- Use top or htop for a dynamic, real-time view.
+- Combine with grep to quickly filter by command or user.
