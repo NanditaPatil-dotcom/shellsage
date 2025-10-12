@@ -1,0 +1,12 @@
+LICENSE
+README.md
+pyproject.toml
+shellsage/__init__.py
+shellsage/cli.py
+shellsage/utils.py
+shellsage_cli.egg-info/PKG-INFO
+shellsage_cli.egg-info/SOURCES.txt
+shellsage_cli.egg-info/dependency_links.txt
+shellsage_cli.egg-info/entry_points.txt
+shellsage_cli.egg-info/requires.txt
+shellsage_cli.egg-info/top_level.txt
