@@ -1,43 +1,31 @@
 Metadata-Version: 2.4
 Name: shellsage-cli
-Version: 0.1.5
+Version: 0.1.7
 Summary: An AI-powered Linux command explainer (FAISS + Hugging Face)
 Author-email: Nandita <your.email@example.com>
 License-Expression: MIT
-Project-URL: Homepage, https://github.com/yourusername/shellsage
-Project-URL: Repository, https://github.com/yourusername/shellsage
-Project-URL: Issues, https://github.com/yourusername/shellsage/issues
 Keywords: cli,linux,commands,ai,explainer,terminal
-Classifier: Development Status :: 3 - Alpha
-Classifier: Intended Audience :: Developers
-Classifier: Operating System :: OS Independent
-Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.9
-Classifier: Programming Language :: Python :: 3.10
-Classifier: Programming Language :: Python :: 3.11
-Classifier: Programming Language :: Python :: 3.12
-Classifier: Topic :: System :: Shells
-Classifier: Topic :: Utilities
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: click==8.1.7
 Requires-Dist: typer==0.12.3
 Requires-Dist: rich==13.7.1
-Requires-Dist: sentence-transformers==2.7.0
 Requires-Dist: transformers==4.46.3
 Requires-Dist: huggingface_hub==0.24.6
-Requires-Dist: faiss-cpu==1.12.0
 Requires-Dist: torch>=2.1.0
+Requires-Dist: faiss-cpu==1.12.0
+Requires-Dist: sentence-transformers==2.7.0
 Requires-Dist: numpy>=1.26.0
 Requires-Dist: tqdm==4.66.4
 Requires-Dist: PyPDF2==3.0.1
 Requires-Dist: pdfminer.six==20231228
 Dynamic: license-file
 
+
 # ShellSage 🐚
 
 ShellSage is your friendly command-line companion — run any shell command with beautiful output formatting.
+
 
 ### Installation:
 ```bash
