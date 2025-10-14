@@ -1,5 +1,5 @@
 
-# ShellSage 🐚
+# ShellSage 
 
 ShellSage is your friendly command-line companion — run any shell command with beautiful output formatting.
 
