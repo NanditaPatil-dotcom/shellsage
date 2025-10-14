@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: shellsage-cli
-Version: 0.1.7
+Version: 0.2.3
 Summary: An AI-powered Linux command explainer (FAISS + Hugging Face)
 Author-email: Nandita <your.email@example.com>
 License-Expression: MIT
@@ -22,7 +22,7 @@ Requires-Dist: pdfminer.six==20231228
 Dynamic: license-file
 
 
-# ShellSage 🐚
+# ShellSage 
 
 ShellSage is your friendly command-line companion — run any shell command with beautiful output formatting.
 

@@ -1,6 +1,6 @@
 [project]
 name = "shellsage-cli"
-version = "0.1.7"
+version = "0.2.3"
 description = "An AI-powered Linux command explainer (FAISS + Hugging Face)"
 readme = "README.md"
 authors = [{ name = "Nandita", email = "your.email@example.com" }]
@@ -24,6 +24,9 @@ dependencies = [
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["shellsage*"]
+
+[tool.setuptools.package-data]
+shellsage = ["docs/*.txt", "embeddings/*"]
 
 [project.scripts]
 shellsage = "shellsage.cli:app"

@@ -1,0 +1,21 @@
+ls — list directory contents
+
+Brief:
+- The ls command lists files and directories in the current or specified path.
+- Commonly used to quickly inspect what is inside a folder.
+
+Syntax:
+- ls
+- ls -l            # long listing with permissions, owner, size, and date
+- ls -a            # include hidden files (those starting with .)
+- ls -la           # long listing + hidden files
+- ls -lh           # long listing with human-readable sizes (KB, MB)
+
+Examples:
+- ls -la /var/log
+- ls -lh ~/Downloads
+
+Tips:
+- Combine -l with -h for easier reading of file sizes.
+- Use --color=auto for colored output in many shells.
+- On macOS, consider -G for color if --color isn’t available.

@@ -1,0 +1,21 @@
+grep — print lines that match patterns
+
+Brief:
+- grep searches for lines matching a given pattern in files or standard input.
+- Supports powerful regular expressions to filter text.
+
+Syntax:
+- grep "pattern" file.txt
+- grep -R "main" ./src          # recursive search
+- grep -n "error" app.log       # show line numbers
+- grep -i "warning" file.txt    # case-insensitive
+- grep -E "foo|bar" file.txt    # extended regex (egrep)
+
+Examples:
+- dmesg | grep -i usb
+- grep -R "TODO" .
+
+Tips:
+- Use -R for recursive, -n for line numbers, -i for case-insensitive.
+- Pipe other commands into grep to filter output.
+- For large codebases, consider ripgrep (rg) for speed.

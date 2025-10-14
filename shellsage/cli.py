@@ -1,25 +1,26 @@
 from __future__ import annotations
 import subprocess
 import textwrap
-from typing import List
 import typer
 from rich.console import Console
 from rich.panel import Panel
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
+from shellsage.utils import retrieve_context, build_or_load_index
 
-from .utils import retrieve_context, build_or_load_index
-
-app = typer.Typer(add_completion=False, help="ShellSage: Linux command explainer with RAG (FAISS + Hugging Face)")
+app = typer.Typer(
+    add_completion=False,
+    help="ShellSage: Explain Linux commands using docs + AI"
+)
 console = Console()
 _generator = None
 _tokenizer = None
 
 
 def _get_generator():
-    """Lazy-load the instruction-tuned causal LM (Qwen2.5-0.5B-Instruct, CPU)."""
+    """Lazy-load the instruction-tuned LM (Qwen2.5-0.5B-Instruct, CPU)."""
     global _generator, _tokenizer
     if _generator is None or _tokenizer is None:
-        console.print("[yellow]Loading Qwen/Qwen2.5-0.5B-Instruct on CPU. This may take a moment...[/yellow]")
+        console.print("[yellow]Loading Qwen2.5-0.5B-Instruct on CPU...[/yellow]")
         model_name = "Qwen/Qwen2.5-0.5B-Instruct"
         _tokenizer = AutoTokenizer.from_pretrained(model_name)
         model = AutoModelForCausalLM.from_pretrained(model_name)
@@ -32,7 +33,7 @@ def _get_generator():
     return _generator, _tokenizer
 
 
-def _format_context(docs: List[dict], max_chars: int = 500) -> str:
+def _format_context(docs, max_chars: int = 500) -> str:
     parts = []
     for d in docs:
         header = f"[Source: {d.get('path', 'unknown')}]"
@@ -43,24 +44,41 @@ def _format_context(docs: List[dict], max_chars: int = 500) -> str:
     return "\n\n".join(parts)
 
 
-@app.callback(invoke_without_command=True, context_settings={"allow_extra_args": True, "ignore_unknown_options": True})
-def main(
-    ctx: typer.Context,
-    top_k: int = typer.Option(3, "--top-k", help="Number of docs to retrieve for context"),
-):
-    """
-    Run a Linux command and explain it using ShellSage AI.
-    Usage: shellsage "ls -la"
-    """
-    raw_command = " ".join(ctx.args)
-    if not raw_command:
-        console.print("[red]❌ No command provided.[/red]")
-        raise typer.Exit(1)
+def _clean_explanation(text: str) -> str:
+    text = text.strip()
+    if not text:
+        return ""
+    # Find the first sentence ending with ., !, or ?
+    for i, char in enumerate(text):
+        if char in '.!?':
+            return text[:i+1].strip()
+    # If no punctuation found, take the first line and add a period
+    lines = text.splitlines()
+    if lines:
+        first_line = lines[0].strip()
+        if not first_line.endswith('.'):
+            first_line += '.'
+        return first_line
+    return ""
 
+
+@app.callback(invoke_without_command=True, context_settings={"ignore_unknown_options": True})
+def main(
+    raw_command: str = typer.Argument(..., help='The Linux command to explain, e.g., "ls -la"'),
+    top_k: int = typer.Option(3, "--top-k", help="Number of docs to retrieve for context"),
+    rebuild: bool = typer.Option(False, "--rebuild", help="Force rebuild of the FAISS index"),
+):
     console.rule("[b]ShellSage[/b]")
     console.print(f"[bold cyan]Running Command:[/bold cyan] {raw_command}\n")
 
-    # Run the command and print output
+    # Rebuild FAISS index if requested or missing
+    if rebuild:
+        console.print("[yellow]Rebuilding FAISS index...[/yellow]")
+        build_or_load_index(force_rebuild=True)
+    else:
+        build_or_load_index(force_rebuild=False)
+
+    # Run the Linux command
     try:
         result = subprocess.run(raw_command, shell=True, check=False, text=True, capture_output=True)
         console.print(result.stdout or "[dim]No output[/dim]")
@@ -69,49 +87,44 @@ def main(
     except Exception as e:
         console.print(f"[red]Failed to run command: {e}[/red]")
 
-    # Load FAISS index
-    build_or_load_index(force_rebuild=False)
-
-    # Retrieve context
+    # Retrieve context from docs
     docs = retrieve_context(raw_command, top_k=top_k)
     context_str = _format_context(docs) if docs else ""
 
-    # Simplified + clean prompt
     prompt = textwrap.dedent(f"""
-        Explain this Linux command in simple, clear English.
-        Include:
-        - What the command does
-        - Meaning of each option
-        - Example output
-        - Practical notes (if any)
-
+        Explain in one sentence what this Linux command does.
         Context:
         {context_str}
-
-        Command: {raw_command}
+        Command:
+        {raw_command}
+        Explanation:
     """).strip()
 
-    # Generate explanation
     try:
         generator, _ = _get_generator()
         out = generator(
             prompt,
-            max_new_tokens=300,
+            max_new_tokens=50,
             do_sample=True,
             temperature=0.7,
             top_p=0.9,
             num_return_sequences=1,
         )
 
-        # Strip the echoed prompt if model repeats it
         full_text = out[0]["generated_text"]
         explanation = full_text[len(prompt):].strip()
+        explanation = _clean_explanation(explanation)
+
+        if not explanation:
+            first_word = raw_command.split()[0]
+            explanation = f"No explanation found in docs. But '{raw_command}' is a Linux command — try checking 'man {first_word}' for details."
 
         console.print(Panel(explanation, title="ShellSage Explanation"))
     except Exception as e:
         console.print(f"[red]Failed to generate AI explanation: {e}[/red]")
-        console.print("[yellow]Make sure you have internet connection for first-time model download.[/yellow]")
+        console.print("[yellow]Ensure internet connection for first-time model download.[/yellow]")
 
 
 if __name__ == "__main__":
     app()
+

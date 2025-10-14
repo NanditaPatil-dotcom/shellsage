@@ -1,0 +1,3 @@
+ls -la -> lists all files in long format, including hidden ones
+grep -> searches for patterns in text files
+sudo apt update -> updates package lists
