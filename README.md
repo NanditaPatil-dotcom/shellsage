@@ -4,7 +4,7 @@
 ShellSage is your friendly command-line companion — run any shell command with beautiful output formatting.
 But a condition, it runs only on python envs
 
-### Installation:
+### Installation(only on python env):
 ```bash
 pip install shellsage-cli
 ```
